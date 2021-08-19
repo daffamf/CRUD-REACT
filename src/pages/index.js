@@ -12,9 +12,9 @@ export default class crud extends Component {
             nama: "",
             deskripsi: "",
             id: "",
-            
+
         }
-        
+
     }
 
     handelChange = (event) => {
@@ -23,37 +23,82 @@ export default class crud extends Component {
 
         })
 
-       
+
     }
 
     handelSumbit = (event) => {
         event.preventDefault();
 
-       this.setState({
-           makanan: [
-               ...this.state.makanan,
-               {
-                   id : this.state.makanan.length + 1,
-                   nama:this.state.nama,
-                   deskripsi:this.state.deskripsi
-               }
-           ]
-       })
+        if (this.state.id === "") {
+            this.setState({
+                makanan: [
+                    ...this.state.makanan,
+                    {
+                        id: this.state.makanan.length + 1,
+                        nama: this.state.nama,
+                        deskripsi: this.state.deskripsi
+                    }
+                ]
+            })
+        } else {
+            const makananSelaindiPilih = this.state.makanan
+                .filter((makanan) => makanan.id !== this.state.id)
+                .map((filterMakanan) => {
+                    return filterMakanan
+                })
+                this.setState({
+                    makanan: [
+                        ...makananSelaindiPilih,
+                        {
+                            id: this.state.makanan.length + 1,
+                            nama: this.state.nama,
+                            deskripsi: this.state.deskripsi
+                        }
+                    ]
+                })
+        }
+
+
+        this.setState({
+
+            nama: "",
+            deskripsi: "",
+            id: "",
+
+        })
     }
 
 
-    render() {
-      
-        return (
-            <div>
-                <Navbar />
+        editData = (id) => {
+            const PilihMakanan = this.state.makanan
+                .filter((makanan) => makanan.id === id)
+                .map((filterMakanan) => {
+                    return filterMakanan
+                })
+
+            this.setState({
+                nama: PilihMakanan[0].nama,
+                deskripsi: PilihMakanan[0].deskripsi,
+                id: PilihMakanan[0].id,
+
+            })
+        }
 
 
-                <div className="container mt-4">
-                    <Table makanan={this.state.makanan}/>
-                    <Tambah {...this.state} handelChange={this.handelChange} handelSumbit={this.handelSumbit} />
+
+
+        render() {
+
+            return (
+                <div>
+                    <Navbar />
+
+
+                    <div className="container mt-4">
+                        <Table makanan={this.state.makanan} editData={this.editData} />
+                        <Tambah {...this.state} handelChange={this.handelChange} handelSumbit={this.handelSumbit} />
+                    </div>
                 </div>
-            </div>
-        );
+            );
+        }
     }
-}
