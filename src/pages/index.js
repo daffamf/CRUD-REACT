@@ -84,6 +84,17 @@ export default class crud extends Component {
             })
         }
 
+        hapusData = (id) => {
+            const makananBaru = this.state.makanan
+                .filter((makanan) => makanan.id !== id)
+                .map((filterMakanan) => {
+                        return filterMakanan
+            })
+            this.setState({
+                makanan:makananBaru
+            })
+        }
+
 
 
 
@@ -95,7 +106,7 @@ export default class crud extends Component {
 
 
                     <div className="container mt-4">
-                        <Table makanan={this.state.makanan} editData={this.editData} />
+                        <Table makanan={this.state.makanan} editData={this.editData} hapusData={this.hapusData} />
                         <Tambah {...this.state} handelChange={this.handelChange} handelSumbit={this.handelSumbit} />
                     </div>
                 </div>
